@@ -14,6 +14,32 @@ const Statistic = (props) => {
   );
 };
 
+const Statistics = ({
+  stat1,
+  stat2,
+  stat3,
+  totalFeedback,
+  avgFeedback,
+  positiveFeedbackPercentage,
+}) => {
+  const feedbackGiven = stat1.value + stat2.value + stat3.value > 0;
+
+  if (feedbackGiven) {
+    return (
+      <>
+        feedbackGiven ?
+        <Statistic title={stat1.title} value={stat1.value} />
+        <Statistic title={stat2.title} value={stat2.value} />
+        <Statistic title={stat3.title} value={stat3.value} />
+        <Statistic title="all" value={totalFeedback} />
+        <Statistic title="average" value={avgFeedback} />
+        <Statistic title="positive" value={positiveFeedbackPercentage} />
+      </>
+    );
+  }
+  return <p>"No feedback given"</p>;
+};
+
 const App = () => {
   // Save clicks of each button to its own state
   const [good, setGood] = useState(0);
@@ -36,12 +62,15 @@ const App = () => {
       <Button clickHandler={handleBadFeedback} text="bad" />
 
       <Section title="statistics" />
-      <Statistic title="good" value={good} />
-      <Statistic title="neutral" value={neutral} />
-      <Statistic title="bad" value={bad} />
-      <Statistic title="all" value={totalFeedback} />
-      <Statistic title="average" value={avgFeedback} />
-      <Statistic title="positive" value={positiveFeedbackPercentage} />
+
+      <Statistics
+        stat1={{ title: "good", value: good }}
+        stat2={{ title: "neutral", value: neutral }}
+        stat3={{ title: "bad", value: bad }}
+        totalFeedback={totalFeedback}
+        avgFeedback={avgFeedback}
+        positiveFeedbackPercentage={positiveFeedbackPercentage}
+      />
     </div>
   );
 };
