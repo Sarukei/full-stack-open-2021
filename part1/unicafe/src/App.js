@@ -20,6 +20,10 @@ const App = () => {
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
+  const totalFeedback = good + neutral + bad;
+  const avgFeedback = (good - bad) / totalFeedback;
+  const positiveFeedbackPercentage = (good / totalFeedback) * 100 + "%";
+
   const handleGoodFeedback = () => setGood(good + 1);
   const handleNeutralFeedback = () => setNeutral(neutral + 1);
   const handleBadFeedback = () => setBad(bad + 1);
@@ -35,6 +39,9 @@ const App = () => {
       <Statistic title="good" value={good} />
       <Statistic title="neutral" value={neutral} />
       <Statistic title="bad" value={bad} />
+      <Statistic title="all" value={totalFeedback} />
+      <Statistic title="average" value={avgFeedback} />
+      <Statistic title="positive" value={positiveFeedbackPercentage} />
     </div>
   );
 };
