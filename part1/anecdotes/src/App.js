@@ -16,8 +16,13 @@ const App = () => {
 
   const randNum = (start, end) => Math.floor(Math.random() * end) + start;
 
+  const mostVotedAnecdote = anecdotes[points.indexOf(Math.max(...points))];
+  console.log(mostVotedAnecdote);
+
   return (
     <div>
+      <h2>Anecdote of the day</h2>
+
       <p>{anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <button
@@ -32,6 +37,9 @@ const App = () => {
       <button onClick={() => setSelected(randNum(0, anecdotes.length))}>
         next anecdote
       </button>
+
+      <h2>Anecdote with most votes</h2>
+      <p>{mostVotedAnecdote}</p>
     </div>
   );
 };
