@@ -9,6 +9,12 @@ const App = () => {
   ]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+  const [searchFilter, setSearchFilter] = useState(null);
+  const personsToShow = !searchFilter
+    ? persons
+    : persons.filter((person) =>
+        person.name.toLowerCase().includes(searchFilter.toLowerCase())
+      );
 
   const personAlreadyExists = (name) =>
     persons.find((person) => person.name === name);
@@ -49,6 +55,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with{" "}
+        <input
+          onChange={(e) => setSearchFilter(e.target.value)}
+          value={searchFilter || ""}
+        />
+      </div>
+
+      <h2>add a new</h2>
       <form onSubmit={handleNewPerson}>
         <div>
           name: <input onChange={handleNewName} value={newName} />
@@ -62,8 +77,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.length
-        ? persons.map((person, i) => (
+      {personsToShow.length
+        ? personsToShow.map((person, i) => (
             <p key={person.name}>
               {person.name} {person.number}
             </p>
