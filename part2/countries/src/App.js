@@ -10,8 +10,13 @@ const Filter = (props) => {
   );
 };
 
-const CountryResult = ({ country }) => {
-  return <div>{country.name}</div>;
+const CountryResult = ({ country, handleShowCountry }) => {
+  return (
+    <div>
+      {country.name}{" "}
+      <button onClick={() => handleShowCountry(country)}>show</button>
+    </div>
+  );
 };
 
 const CountryInfo = ({ country }) => {
@@ -32,7 +37,7 @@ const CountryInfo = ({ country }) => {
   );
 };
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleShowCountry }) => {
   if (countries.length > 10) {
     return <p>Too many matches, specify another filter</p>;
   }
@@ -44,7 +49,11 @@ const Countries = ({ countries }) => {
   return (
     <div>
       {countries.map((country) => (
-        <CountryResult country={country} key={country.numericCode} />
+        <CountryResult
+          country={country}
+          key={country.numericCode}
+          handleShowCountry={handleShowCountry}
+        />
       ))}
     </div>
   );
@@ -56,7 +65,7 @@ const App = (props) => {
   const countriesToShow = !filter
     ? countries
     : countries.filter((country) =>
-        country.name.toLowerCase().includes(filter)
+        country.name.toLowerCase().includes(filter.toLowerCase())
       );
 
   useEffect(() => {
@@ -66,13 +75,20 @@ const App = (props) => {
   }, []);
 
   const handleFilter = (e) => {
-    setFilter(e.target.value.toLowerCase());
+    setFilter(e.target.value);
+  };
+
+  const handleShowCountry = (country) => {
+    setFilter(country.name);
   };
 
   return (
     <div>
       <Filter handleFilter={handleFilter} filter={filter} />
-      <Countries countries={countriesToShow} />
+      <Countries
+        countries={countriesToShow}
+        handleShowCountry={handleShowCountry}
+      />
     </div>
   );
 };
