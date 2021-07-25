@@ -1,6 +1,54 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const WeatherStackAPIKey = process.env.REACT_APP_WEATHERSTACK_API_KEY;
+// console.log("WEATHER API", WeatherStackAPIKey);
+
+const WeatherReport = ({ country }) => {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const BASE_URL = `http://api.weatherstack.com`;
+
+    axios
+      .get(`${BASE_URL}/current`, {
+        params: {
+          access_key: WeatherStackAPIKey,
+          query: `${country.capital}, ${country.name}`,
+          units: "m",
+          type: "City",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        const { current } = response.data;
+        setWeather({
+          temp: `${current.temperature} Celsius`,
+          wind: `${current.wind_speed} mph direction ${current.wind_dir}`,
+          weatherIcon: current.weather_icons[0],
+          weatherDesc: current.weather_descriptions[0],
+        });
+      });
+  }, [country]);
+
+  if (!weather) {
+    return <h2>Could not load weather data</h2>;
+  }
+
+  return (
+    <div>
+      <h2>Weather in {country.capital}</h2>
+      <p>
+        <strong>temperature:</strong> {weather.temp}
+      </p>
+      <img src={weather.weatherIcon} alt={weather.weatherDesc} />
+      <p>
+        <strong>wind:</strong> {weather.wind}
+      </p>
+    </div>
+  );
+};
+
 const Filter = (props) => {
   return (
     <div>
@@ -33,6 +81,8 @@ const CountryInfo = ({ country }) => {
         ))}
       </ul>
       <img src={country.flag} alt={`Flag of ${country.name}`} width="115" />
+
+      <WeatherReport country={country} />
     </div>
   );
 };
