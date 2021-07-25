@@ -48,9 +48,21 @@ const App = () => {
                 person.id !== existingPerson.id ? person : returnedPerson
               )
             );
-            setNotificationMessage(`Updated ${existingPerson.name}`);
+            setNotificationMessage({ msg: `Updated ${existingPerson.name}` });
 
             setTimeout(() => setNotificationMessage(null), 5000);
+          })
+          .catch((err) => {
+            setNotificationMessage({
+              msg: `Information of ${existingPerson.name} has already been removed from the`,
+              error: true,
+            });
+
+            setTimeout(() => setNotificationMessage(null), 5000);
+
+            setPersons(
+              persons.filter((person) => person.id !== existingPerson.id)
+            );
           });
       }
       setNewName("");
@@ -69,7 +81,7 @@ const App = () => {
     phonebookService.addContact(newPerson).then((contact) => {
       setPersons([...persons, contact]);
 
-      setNotificationMessage(`Added ${contact.name}`);
+      setNotificationMessage({ msg: `Added ${contact.name}` });
 
       setTimeout(() => setNotificationMessage(null), 5000);
     });
