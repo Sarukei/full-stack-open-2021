@@ -26,10 +26,32 @@ const App = () => {
     e.preventDefault();
 
     // Check if person already exists
-    if (personAlreadyExists(newName)) {
-      return alert(`${newName} already added to phonebook`);
+    const existingPerson = personAlreadyExists(newName);
+    const updatePhoneNumber =
+      existingPerson &&
+      window.confirm(
+        `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`
+      );
+    if (existingPerson) {
+      if (updatePhoneNumber) {
+        phonebookService
+          .updateContact(existingPerson.id, {
+            ...existingPerson,
+            number: newNumber,
+          })
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== existingPerson.id ? person : returnedPerson
+              )
+            );
+          });
+      }
+      setNewName("");
+      setNewNumber("");
+      return;
+      // return alert(`${newName} already added to phonebook`);
     }
-
     // Add the new name to the phone list
 
     const newPerson = {
@@ -40,7 +62,6 @@ const App = () => {
     phonebookService
       .addContact(newPerson)
       .then((contact) => setPersons([...persons, contact]));
-
     // Clear the new name value from the input
     setNewName("");
     // Clear the number value from the input
@@ -58,6 +79,17 @@ const App = () => {
     setNewNumber(numberValue);
   };
 
+  const deleteContact = (id) => {
+    const contact = persons.find((person) => person.id === id);
+
+    console.log(contact);
+    if (!window.confirm(`Delete ${contact.name}?`)) return;
+
+    phonebookService.deleteContact(id).then(() => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -73,7 +105,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deleteContact={deleteContact} />
     </div>
   );
 };
