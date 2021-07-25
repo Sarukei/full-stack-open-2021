@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import phonebookService from "./services/phonebook";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -16,9 +16,7 @@ const App = () => {
       );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    phonebookService.getAllContacts().then((contacts) => setPersons(contacts));
   }, []);
 
   const personAlreadyExists = (name) =>
@@ -38,7 +36,10 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    setPersons([...persons, newPerson]);
+
+    phonebookService
+      .addContact(newPerson)
+      .then((contact) => setPersons([...persons, contact]));
 
     // Clear the new name value from the input
     setNewName("");
