@@ -3,12 +3,15 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import phonebookService from "./services/phonebook";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchFilter, setSearchFilter] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState(null);
+
   const personsToShow = !searchFilter
     ? persons
     : persons.filter((person) =>
@@ -45,10 +48,14 @@ const App = () => {
                 person.id !== existingPerson.id ? person : returnedPerson
               )
             );
+            setNotificationMessage(`Updated ${existingPerson.name}`);
+
+            setTimeout(() => setNotificationMessage(null), 5000);
           });
       }
       setNewName("");
       setNewNumber("");
+
       return;
       // return alert(`${newName} already added to phonebook`);
     }
@@ -59,9 +66,13 @@ const App = () => {
       number: newNumber,
     };
 
-    phonebookService
-      .addContact(newPerson)
-      .then((contact) => setPersons([...persons, contact]));
+    phonebookService.addContact(newPerson).then((contact) => {
+      setPersons([...persons, contact]);
+
+      setNotificationMessage(`Added ${contact.name}`);
+
+      setTimeout(() => setNotificationMessage(null), 5000);
+    });
     // Clear the new name value from the input
     setNewName("");
     // Clear the number value from the input
@@ -93,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter setSearchFilter={setSearchFilter} searchFilter={searchFilter} />
 
       <h2>Add a new</h2>
