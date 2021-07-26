@@ -29,6 +29,15 @@ app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
 
+app.get("/info", (req, res) => {
+  const infoMsg = `
+	<p>Phonebook has info for ${persons.length} people</p>
+
+	<p>${new Date()}</p>
+	`;
+  res.send(infoMsg);
+});
+
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });
