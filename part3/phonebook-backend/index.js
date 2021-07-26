@@ -44,6 +44,8 @@ app.use(
 );
 app.use(cors());
 
+app.use(express.static("build"));
+
 app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
