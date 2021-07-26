@@ -25,8 +25,27 @@ let persons = [
 ];
 const PORT = 3001;
 
+app.use(express.json());
+
 app.get("/api/persons", (req, res) => {
   res.json(persons);
+});
+
+const generateId = () => Math.floor(Math.random() * 12345);
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+  if (!body || !body.name)
+    return res.status(400).json({ error: `Cannot post empty person` });
+
+  const newPerson = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  persons = [...persons, newPerson];
+
+  res.json(newPerson);
 });
 
 app.get(`/api/persons/:id`, (req, res) => {
