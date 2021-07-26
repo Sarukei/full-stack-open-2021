@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 let persons = [
@@ -41,6 +42,7 @@ app.use(
     ].join(" ");
   })
 );
+app.use(cors());
 
 app.get("/api/persons", (req, res) => {
   res.json(persons);
