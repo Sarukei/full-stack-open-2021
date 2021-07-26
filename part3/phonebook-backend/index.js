@@ -34,8 +34,20 @@ app.get("/api/persons", (req, res) => {
 const generateId = () => Math.floor(Math.random() * 12345);
 app.post("/api/persons", (req, res) => {
   const body = req.body;
-  if (!body || !body.name)
-    return res.status(400).json({ error: `Cannot post empty person` });
+
+  if (!body || !body.name || !body.number) {
+    return res.status(400).json({ error: `Name or number is missing` });
+  }
+
+  const existingPersonWithName = persons.find(
+    (person) => person.name.toLowerCase() === body.name.toLowerCase()
+  );
+
+  if (existingPersonWithName) {
+    return res
+      .status(400)
+      .json({ error: `The name already exists in the phonebook` });
+  }
 
   const newPerson = {
     id: generateId(),
