@@ -74,15 +74,14 @@ app.post("/api/persons", (req, res) => {
       .json({ error: `The name already exists in the phonebook` });
   }
 
-  const newPerson = {
-    id: generateId(),
+  const newPerson = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  persons = [...persons, newPerson];
-
-  res.json(newPerson);
+  newPerson.save().then((savedPerson) => {
+    res.json(savedPerson);
+  });
 });
 
 app.get(`/api/persons/:id`, (req, res) => {
