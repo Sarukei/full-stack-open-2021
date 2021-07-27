@@ -57,31 +57,34 @@ app.get("/api/persons", (req, res) => {
 });
 
 const generateId = () => Math.floor(Math.random() * 12345);
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const body = req.body;
 
-  if (!body || !body.name || !body.number) {
-    return res.status(400).json({ error: `Name or number is missing` });
-  }
+  // if (!body || !body.name || !body.number) {
+  //   return res.status(400).json({ error: `Name or number is missing` });
+  // }
 
-  const existingPersonWithName = persons.find(
-    (person) => person.name.toLowerCase() === body.name.toLowerCase()
-  );
+  // const existingPersonWithName = persons.find(
+  //   (person) => person.name.toLowerCase() === body.name.toLowerCase()
+  // );
 
-  if (existingPersonWithName) {
-    return res
-      .status(400)
-      .json({ error: `The name already exists in the phonebook` });
-  }
+  // if (existingPersonWithName) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: `The name already exists in the phonebook` });
+  // }
 
   const newPerson = new Person({
     name: body.name,
     number: body.number,
   });
 
-  newPerson.save().then((savedPerson) => {
-    res.json(savedPerson);
-  });
+  newPerson
+    .save()
+    .then((savedPerson) => {
+      res.json(savedPerson);
+    })
+    .catch((err) => next(err));
 });
 
 app.get(`/api/persons/:id`, (req, res) => {
@@ -139,6 +142,8 @@ const errorHandler = (err, req, res, next) => {
 
   if (err.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
+  } else if (err.name === "Validation Error") {
+    return res.status(400).send({ error: err.message });
   }
 };
 
