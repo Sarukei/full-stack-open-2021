@@ -39,7 +39,7 @@ const Person = mongoose.model("Person", personSchema);
 if (person.name && person.number) {
   const newPerson = new Person({ ...person });
 
-  newPerson.save().then((result) => {
+newPerson.save().then((result) => {
     console.log(result);
     console.log(`Added ${result.name} number ${result.number} to ph onebook`);
 
