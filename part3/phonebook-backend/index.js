@@ -121,13 +121,17 @@ app.put("/api/persons/:id", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.get("/info", (req, res) => {
-  const infoMsg = `
-	<p>Phonebook has info for ${persons.length} people</p>
-
-	<p>${new Date()}</p>
-	`;
-  res.send(infoMsg);
+app.get("/info", (req, res, next) => {
+  Person.countDocuments({})
+    .then((count) => {
+      const infoMsg = `
+		<p>Phonebook has info for ${count} people</p>
+	
+		<p>${new Date()}</p>
+		`;
+      res.send(infoMsg);
+    })
+    .catch((err) => next(err));
 });
 
 const errorHandler = (err, req, res, next) => {
