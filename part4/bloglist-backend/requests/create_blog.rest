@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+	"title": "My First Blogpost", 
+	"author": "Sarukei", 
+	"url": "https://github.com/Sarukei/full-stack-open-2021", 
+	"likes": 0
+}
