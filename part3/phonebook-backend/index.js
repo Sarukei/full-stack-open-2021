@@ -96,16 +96,11 @@ app.get(`/api/persons/:id`, (req, res) => {
 });
 
 app.delete(`/api/persons/:id`, (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id === id);
+  const id = req.params.id;
 
-  if (!person) {
-    return res.status(204).end();
-  }
-
-  persons = persons.filter((person) => person.id !== id);
-
-  return res.status(204).end();
+  Person.findByIdAndRemove(id).then((result) => {
+    res.status(204).end();
+  });
 });
 
 app.get("/info", (req, res) => {
