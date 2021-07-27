@@ -54,15 +54,15 @@ const App = () => {
           })
           .catch((err) => {
             setNotificationMessage({
-              msg: `Information of ${existingPerson.name} has already been removed from the`,
+              msg: err.response.data.error,
               error: true,
             });
 
             setTimeout(() => setNotificationMessage(null), 5000);
 
-            setPersons(
-              persons.filter((person) => person.id !== existingPerson.id)
-            );
+            // setPersons(
+            //   persons.filter((person) => person.id !== existingPerson.id)
+            // );
           });
       }
       setNewName("");
@@ -78,13 +78,22 @@ const App = () => {
       number: newNumber,
     };
 
-    phonebookService.addContact(newPerson).then((contact) => {
-      setPersons([...persons, contact]);
+    phonebookService
+      .addContact(newPerson)
+      .then((contact) => {
+        setPersons([...persons, contact]);
 
-      setNotificationMessage({ msg: `Added ${contact.name}` });
+        setNotificationMessage({ msg: `Added ${contact.name}` });
 
-      setTimeout(() => setNotificationMessage(null), 5000);
-    });
+        setTimeout(() => setNotificationMessage(null), 5000);
+      })
+      .catch((error) => {
+        setNotificationMessage({ msg: error.response.data.error, error: true });
+
+        setTimeout(() => setNotificationMessage(null), 5000);
+
+        console.error(error.response.data);
+      });
     // Clear the new name value from the input
     setNewName("");
     // Clear the number value from the input
