@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -25,4 +27,40 @@ const favoriteBlog = (blogs) => {
   return blogWithMostLikes;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+// Using Lodash
+const mostBlogs = (blogs) => {
+  const blogCountByAuthor = _.countBy(blogs, "author");
+  const blogCountByAuthorArray = _.map(blogCountByAuthor, (value, key) => ({
+    author: key,
+    blogs: value,
+  }));
+
+  return _.maxBy(blogCountByAuthorArray, "blogs");
+};
+
+// Without lodash
+// const mostBlogs = (blogs) =>
+//   blogs.reduce(
+//     (accu, curr, idx, arr) => {
+//       const blogger = accu.bloggers.get(curr.author) || {
+//         author: curr.author,
+//         blogs: 1,
+//       };
+
+//       accu.bloggers.set(curr.author, { ...blogger, blogs: blogger.blogs + 1 });
+
+//       accu.mostBlogs =
+//         blogger.blogs > accu.mostBlogs.blogs ? blogger : accu.mostBlogs;
+
+//       return idx != arr.length - 1 ? accu : accu.mostBlogs;
+//     },
+//     {
+//       bloggers: new Map(),
+//       mostBlogs: {
+//         author: "",
+//         blogs: 0,
+//       },
+//     }
+//   );
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
