@@ -63,4 +63,30 @@ const mostBlogs = (blogs) => {
 //     }
 //   );
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogs) =>
+  blogs.reduce(
+    (accu, curr, idx, arr) => {
+      let blogger = accu.bloggers.get(curr.author);
+
+      accu.bloggers.set(curr.author, {
+        author: curr.author,
+        likes: (blogger?.likes || 0) + curr.likes,
+      });
+
+      blogger = accu.bloggers.get(curr.author);
+
+      accu.mostLikes =
+        blogger.likes > accu.mostLikes.likes ? blogger : accu.mostLikes;
+
+      return idx != arr.length - 1 ? accu : accu.mostLikes;
+    },
+    {
+      bloggers: new Map(),
+      mostLikes: {
+        author: null,
+        likes: 0,
+      },
+    }
+  );
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
