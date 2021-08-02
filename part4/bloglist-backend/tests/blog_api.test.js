@@ -29,6 +29,12 @@ test("all blogs returned", async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
 
+test("blogs have an id", async () => {
+  const blogs = await helper.blogsInDb();
+  const blog = blogs[0];
+  expect(blog.id).toBeDefined();
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
