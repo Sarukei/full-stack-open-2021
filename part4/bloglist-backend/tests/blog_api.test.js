@@ -39,7 +39,7 @@ test("a valid blog can be added", async () => {
   const newBlog = {
     title: "A new blog",
     author: "testUser",
-    link: "testLink",
+    url: "testLink",
   };
 
   await api
@@ -61,7 +61,7 @@ test('new blogs missing a "likes" property default to 0', async () => {
   const newBlog = {
     title: "A new blog",
     author: "testUser",
-    link: "testLink",
+    url: "testLink",
   };
 
   const response = await api
@@ -74,6 +74,18 @@ test('new blogs missing a "likes" property default to 0', async () => {
 
   expect(response.body.likes).toBeDefined();
   expect(response.body.likes).toBe(0);
+});
+
+test("400 invalid blogs with missing title and url", async () => {
+  const invalidBlog = {
+    author: "testUser",
+  };
+
+  const response = await api
+    .post("/api/blogs")
+    .send(invalidBlog)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
 });
 
 afterAll(() => {
