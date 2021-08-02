@@ -102,6 +102,33 @@ test("deletion of a note", async () => {
   expect(titles).not.toContain(blogToDelete.title);
 });
 
+test("update of a note", async () => {
+  const blogsAtStart = await helper.blogsInDb();
+  const blogToUpdate = blogsAtStart[0];
+
+  const updatedBlog = {
+    title: "Updated log",
+    url: "Updated url",
+    likes: 1011,
+  };
+
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedBlog)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  const savedUpdatedBlog = response.body;
+  const blogsAtEnd = await helper.blogsInDb();
+
+  const titles = blogsAtEnd.map((blog) => blog.title);
+
+  expect(blogsAtEnd.length).toBe(blogsAtStart.length);
+
+  expect(titles).toContain(updatedBlog.title);
+  expect(savedUpdatedBlog.likes).toBe(updatedBlog.likes);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
