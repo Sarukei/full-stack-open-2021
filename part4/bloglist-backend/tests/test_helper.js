@@ -13,6 +13,18 @@ const initialBlogs = [
   },
 ];
 
+const initialUsers = [
+  {
+    username: "Sarukei",
+    name: "Sarukei X",
+    password: "12",
+  },
+  {
+    username: "root",
+    password: "root",
+  },
+];
+
 const nonExistingId = async () => {
   const blog = new Blog({ title: "willremovesoon", author: "default" });
 
@@ -27,4 +39,15 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
-module.exports = { initialBlogs, nonExistingId, blogsInDb };
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users.map((user) => user.toJSON());
+};
+
+module.exports = {
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  initialUsers,
+  usersInDb,
+};
