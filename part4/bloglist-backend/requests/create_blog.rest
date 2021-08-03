@@ -1,10 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGsciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxMDk1NTkzMWNlOWYwNTFmZjc0ZWQxMSIsImlhdCI6MTYyODAwMzk3NH0.z08Sye-q5t6xlfPzkz9Rf3omPXne9Q0DVDuoPettKfU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjYxMDk1NTkzMWNlOWYwNTFmZjc0ZWQxMSIsImlhdCI6MTYyODAwNDQ5NX0.NHmu0oB0q50iah5lwpjZRf7JKQXM0eky6H3QfTovENs
 
 {
-	"title": "My Fourth Blogpost", 
-	"userId": "610955931ce9f051ff74ed11", 
+	"title": "My Fifth Blogpost", 
 	"url": "https://github.com/Sarukei/full-stack-open-2021", 
 	"likes": 1
 }
