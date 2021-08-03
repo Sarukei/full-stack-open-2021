@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
 	"title": "My Second Blogpost", 
-	"author": "Sarukei", 
+	"userId": "610955931ce9f051ff74ed11", 
 	"url": "https://github.com/Sarukei/full-stack-open-2021", 
-	"likes": 0
+	"likes": 1
 }
